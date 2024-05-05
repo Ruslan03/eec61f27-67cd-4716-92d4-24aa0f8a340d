@@ -5,7 +5,7 @@ const BlankState: React.FC<{
   children?: React.ReactNode;
 }> = ({ caption, children }) => {
   return (
-    <tbody className="absolute bg-white/75  left-0 w-full h-full top-0 flex items-center justify-center">
+    <tbody className="absolute bg-white/75 z-50 left-0 w-full h-full top-0 flex items-center justify-center">
       <tr>
         <td>
           {children}
