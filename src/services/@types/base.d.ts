@@ -1,12 +1,12 @@
-export type BaseListApiRequest = {
+export type BaseListParams<T> = T & {
   page: number;
   limit: number;
+  sort?: string;
 };
 
-export type BaseApiResponse<T> = {
-  data: T;
-  status: number;
-  statusText: string;
-  error?: string | null;
-  count?: number | null;
+export type BaseList<T> = {
+  list: T[];
+  page: number;
+  limit: number;
+  total: number;
 };
