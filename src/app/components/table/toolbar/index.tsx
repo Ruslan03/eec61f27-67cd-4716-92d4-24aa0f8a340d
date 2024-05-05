@@ -40,7 +40,7 @@ function Toolbar<D>({ onSaveClick }: ITableToolbar) {
       <Button isDisabled={disabledSave} onClick={handleSave}>
         <SaveIcon />
       </Button>
-      <Button onClick={handleReset}>
+      <Button isDisabled={disabledSave} onClick={handleReset}>
         <ResetIcon />
       </Button>
     </div>
