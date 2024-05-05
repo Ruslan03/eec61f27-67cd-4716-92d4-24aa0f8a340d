@@ -13,11 +13,11 @@ export const PUT = async (
   const reqBody = await request.json();
   const { id, created_at, ...payload } = reqBody;
 
-  const { data, status, statusText } = await supabase
+  const { data, status, statusText, error } = await supabase
     .from("employees")
     .update(payload)
     .eq("id", employeeId)
     .select();
 
-  return apiResponse(data, status, statusText);
+  return apiResponse(data, status, statusText, error);
 };

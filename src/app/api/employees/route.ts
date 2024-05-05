@@ -18,7 +18,7 @@ export const GET = async (req: NextRequest) => {
   const fieldSort = sort?.replace("-", "") as string;
   const isAscending = sort?.charAt(0) === "-";
 
-  const { data, status, statusText, count } = await supabase
+  const { data, status, statusText, count, error } = await supabase
     .from("employees")
     .select("*", {
       count: "exact",
@@ -35,17 +35,17 @@ export const GET = async (req: NextRequest) => {
     total: count,
   };
 
-  return apiResponse(result, status, statusText);
+  return apiResponse(result, status, statusText, error);
 };
 
 export const POST = async (request: NextRequest) => {
   const reqBody = await request.json();
   const { id, created_at, ...payload } = reqBody;
 
-  const { data, status, statusText } = await supabase
+  const { data, status, statusText, error } = await supabase
     .from("employees")
     .insert(payload)
     .select();
 
-  return apiResponse(data, status, statusText);
+  return apiResponse(data, status, statusText, error);
 };
