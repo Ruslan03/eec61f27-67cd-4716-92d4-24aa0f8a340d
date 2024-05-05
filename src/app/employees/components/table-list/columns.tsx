@@ -1,5 +1,6 @@
 import { ColumnType } from "@/app/components/table/@types/tbody";
 import { Employee } from "@/services/@types/employee";
+import { emailRegex } from "@/utils/regex";
 
 const columns: ColumnType<Employee>[] = [
   {
@@ -8,12 +9,18 @@ const columns: ColumnType<Employee>[] = [
     render: (rowData) => {
       return <p>{rowData.first_name}</p>;
     },
+    rule: {
+      required: true,
+    },
   },
   {
     headerTitle: "Last Name",
     fieldName: "last_name",
     render: (rowData) => {
       return <p>{rowData.last_name}</p>;
+    },
+    rule: {
+      required: true,
     },
   },
   {
@@ -22,6 +29,9 @@ const columns: ColumnType<Employee>[] = [
     render: (rowData) => {
       return <p>{rowData.position}</p>;
     },
+    rule: {
+      required: true,
+    },
   },
   {
     headerTitle: "Phone",
@@ -29,12 +39,19 @@ const columns: ColumnType<Employee>[] = [
     render: (rowData) => {
       return <p>{rowData.phone}</p>;
     },
+    rule: {
+      required: true,
+    },
   },
   {
     headerTitle: "Email",
     fieldName: "email",
     render: (rowData) => {
       return <p>{rowData.email}</p>;
+    },
+    rule: {
+      required: true,
+      pattern: emailRegex,
     },
   },
 ];

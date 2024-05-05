@@ -1,5 +1,5 @@
 import React from "react";
-import { ColumnType } from "../@types/tbody";
+import { ColumnType, InputRule } from "../@types/tbody";
 
 interface IItem<D> {
   column: ColumnType<D>;
@@ -21,10 +21,14 @@ export default function Item<D>({
   const data: any = isNewData ? newRowData : rowData;
   const isEditedField =
     isNewData && newRowData[fieldName] !== rowData[fieldName];
+  const [error, setError] = React.useState("");
+  const isError = Boolean(error.length);
 
   return (
     <td
-      className={`${isEditedField && "bg-green-400"} ${
+      className={` ${isEditedField && !isError && "bg-green-400"} ${
+        isError && "bg-red-200"
+      } ${
         openInput && "border-blue-400"
       } border-2 border-t-0 border-x-0 first:border-l-2 last:border-r-2 text-nowrap p-4 text-sm relative cursor-default`}
       onClick={() => setOpenInput(true)}
@@ -35,15 +39,31 @@ export default function Item<D>({
         <Input
           autoFocus
           defaultValue={data[fieldName]}
-          onBlur={(e) => {
+          onBlur={async (e) => {
+            setError("");
+            const { value } = e.target;
+
+            if (column.rule) {
+              const validRule = ruleValidation(column.rule, value);
+              if (validRule !== true) {
+                setError(validRule.toString());
+              }
+            }
+
             const newData = {
               ...data,
-              [fieldName]: e.target.value,
+              [fieldName]: value,
             };
             onInputChange(newData);
             setOpenInput(false);
           }}
         />
+      )}
+
+      {isError && (
+        <div className="w-[calc(100%-5px)] absolute left-0 bottom-0 p-2 rounded-md z-30 translate-y-full bg-red-500">
+          <p className="text-xs text-white">{error}</p>
+        </div>
       )}
     </td>
   );
@@ -57,4 +77,16 @@ const Input: React.FC<React.HTMLAttributes<HTMLInputElement>> = (props) => {
       className="px-1 py-4 focus:outline-none absolute top-0 h-full w-full left-0"
     />
   );
+};
+
+const ruleValidation = (rule: InputRule, value: string): boolean | string => {
+  if (rule.required && !value.length) {
+    return "Field is required";
+  }
+
+  if (rule.pattern && !value.toLowerCase().match(rule.pattern)) {
+    return "Input value is not valid";
+  }
+
+  return true;
 };
